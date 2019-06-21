@@ -1,9 +1,16 @@
 # One Time Secret Docker Image
-This image contains the web APP onetimesecret (https://onetimesecret.com/).   
+This repository is a fork of th awesome project onetimesecret (https://onetimesecret.com/).   
+
+### Differences from the original
+- Containerized (Docker)
+- Deployable on Kubernetes and OpenShift
+- No accounts ans paid features
+- Customizable for your project/company (through environment variables)
 
 ### Image details
-Base image: `fedora:latest`  
+Base image: `ruby:latest`  
 This image is designed to run on Kubernetes/OpenShift together with an REDIS container in a pod.  
+The container can and should be run unprivileged (leveraging the OCP arbitrary user ID feature).  
 
 ### Variables
 | Name | Description | Default value |
@@ -26,3 +33,8 @@ This image is designed to run on Kubernetes/OpenShift together with an REDIS con
 | OTS_SHOW_METADATA |  | 1000 |
 | OTS_SHOW_SECRET |  | 1000 |
 | OTS_BURN_SECRET |  | 1000 |
+
+*to do: add logo, icon and style related env vars*
+
+### OpenShift deployment config
+*to do*
