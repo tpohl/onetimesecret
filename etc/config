@@ -1,7 +1,7 @@
 :site:
   :host: __OTS_DOMAIN
   :domain: __OTS_DOMAIN
-  :ssl: false
+  :ssl: __OTS_SSL
   :secret: __OTS_MASTER_KEY
 :redis:
   :uri: 'redis://user:__OTS_REDIS_PW@__OTS_REDIS_HOST:__OTS_REDIS_PORT/0?timeout=10&thread_safe=false&logging=false'

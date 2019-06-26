@@ -1,8 +1,13 @@
 #!/bin/sh
 
+# Files
 CFG=/etc/onetime/config
 WEBFILES=/source/onetime/public/web
 CSS=$WEBFILES/css/main.css
+
+# Defaults
+OTS_SSL=${OTS_SSL:='true'}
+OTS_COLOR=${OTS_COLOR:='#dd4a22'}
 
 echo "##### Performing vars check #####"
 for VAR in $OTS_DOMAIN $OTS_MASTER_KEY $OTS_REDIS_USER $OTS_REDIS_HOST $OTS_REDIS_PORT $OTS_ADMIN_EMAIL; do
@@ -20,6 +25,7 @@ sed -i "s/__OTS_MASTER_KEY/$OTS_MASTER_KEY/g" $CFG
 sed -i "s/__OTS_REDIS_PW/$OTS_REDIS_PW/g" $CFG
 sed -i "s/__OTS_REDIS_HOST/$OTS_REDIS_HOST/g" $CFG
 sed -i "s/__OTS_REDIS_PORT/$OTS_REDIS_PORT/g" $CFG
+sed -i "s/__OTS_SSL/$OTS_SSL/g" $CFG
 
 sed -i "s/__OTS_CREATE_SECRET/$OTS_CREATE_SECRET/g" $CFG
 sed -i "s/__OTS_CREATE_ACCOUNT/$OTS_CREATE_ACCOUNT/g" $CFG
