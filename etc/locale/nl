@@ -61,9 +61,9 @@
     :secret_form_more_text2: "gratis account"
     :secret_form_more_text3: "Om  wachtwoordzinnen voor extra beveiliging samen met additionele privacy opties. We sturen u zelfs een link als u dat wilt."
     :anon_info1: "Blijf anoniem"
-    :anon_info2: "Creëer een account via "
-    :anon_info3: "tijdelijk E-mail adres"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Deel een link:"
     :requires_passphrase: "Wachtwoordzin verplicht."

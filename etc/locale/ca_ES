@@ -61,8 +61,8 @@
     :secret_form_more_text2: "compte gratuït"
     :secret_form_more_text3: "afegeix frases de contrasenya per a una més gran seguretat com també amb les opcions de privadesa addicionals Fins i tot t'enviem un correu electrònic cap a l'enllaç, si ho desitges."
     :anon_info1: "Roman en l'anonimat!"
-    :anon_info2: "Crea un compte utilitzant una"
-    :anon_info3: "adreça de correu electrònic temporera"
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
     :anon_info4: ""
   :private:
     :pretext: "Comparteix aquest vincle:"

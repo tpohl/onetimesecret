@@ -61,9 +61,9 @@
     :secret_form_more_text2: "conta gratuita"
     :secret_form_more_text3: "e seja capaz de enviar um segredo por email."
     :anon_info1: "Fique anônimo!"
-    :anon_info2: "Criar uma conta usando um "
-    :anon_info3: "endereço de email temporário"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Compartilhar este link:"
     :requires_passphrase: "Requerir uma senha mestre."

@@ -61,8 +61,8 @@
     :secret_form_more_text2: "免费账户"
     :secret_form_more_text3: "并通过邮件发送加密信息"
     :anon_info1: "保持隐蔽！"
-    :anon_info2: "创建您的帐号（基于"
-    :anon_info3: "临时邮箱"
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
     :anon_info4: "）。"
   :private:
     :pretext: "分享该链接:"

@@ -61,9 +61,9 @@
     :secret_form_more_text2: "darmowe konto"
     :secret_form_more_text3: "i uzyskaj możliwość wysyłania poufnych wiadomości przez e-mail."
     :anon_info1: "Pozostań anonimowy!"
-    :anon_info2: "Załóż konto używając "
-    :anon_info3: "tymczasowego adresu e-mail"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Udostępnij to jednorazowe łącze:"
     :requires_passphrase: "Wymaga hasła."

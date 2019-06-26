@@ -61,9 +61,9 @@
     :secret_form_more_text2: "kostenlosen Account"
     :secret_form_more_text3: "um Passphrasen für Extra-Sicherheit zu setzen und zusätzliche Privatsphäre-Optionen nutzen zu können. Wir senden dir den Link sogar per E-Mail, wenn du möchtest."
     :anon_info1: "Anonym bleiben!"
-    :anon_info2: "Erstelle einen Account unter Benutzung einer "
-    :anon_info3: "temporären E-Mail-Adresse"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Teile diesen Link:"
     :requires_passphrase: "Benötigt eine Passphrase."
