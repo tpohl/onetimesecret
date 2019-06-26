@@ -30,7 +30,7 @@
   margin: 0px;
   padding: 0px;
   margin-bottom: 0px;
-  border-bottom: 4px solid red; /* dd4a22, d22000, b04420 */
+  border-bottom: 4px solid __OTS_BANNER_COLOR; /* dd4a22, d22000, b04420 */
 }
 
 #banner .broadcast {
@@ -54,18 +54,17 @@
 
 .btn-custom {
   -webkit-font-smoothing: antialiased;
-  background-color: #dd4a22!important;
+  background-color: __OTS_BUTTON_COLOR!important;
   background-repeat: repeat-x;
   background-image: none;
   color: #fff!important;
-  border-color: #b04420 #b04420 hsl(15,69%,41%);
+  border-color: __OTS_BORDER_COLOR __OTS_BORDER_COLOR hsl(15,69%,41%);
   text-shadow: 0 -1px 0 rgba(0,0,0,0.00);
   font-weight: bold;
   font-size: 20px;
 }
 .btn-custom:hover {
-  background-color: #d22000 !important;
-  text-shadow: 1px 1px 0 #740500;
+  filter: brightness(85%);
 }
 
 
