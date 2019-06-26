@@ -20,7 +20,6 @@ The container can and should be run unprivileged (leveraging the OCP arbitrary u
 | OTS_REDIS_PW | Password for REDIS access | <none - required to be set> |
 | OTS_REDIS_HOST | The hostname or IP address of the REDIS instance | <none - required to be set> |
 | OTS_REDIS_PORT | The port of the REDIS instance | <none - required to be set> |
-| OTS_ADMIN_EMAIL | The email address of the admin user | <none - required to be set> |
 | OTS_CREATE_SECRET |  | 250 |
 | OTS_CREATE_ACCOUNT |  | 10 |
 | OTS_UPDATE_ACCOUNT |  | 10 |
@@ -33,8 +32,10 @@ The container can and should be run unprivileged (leveraging the OCP arbitrary u
 | OTS_SHOW_METADATA |  | 1000 |
 | OTS_SHOW_SECRET |  | 1000 |
 | OTS_BURN_SECRET |  | 1000 |
+| OTS_IMAGE_FAV_ICON | link to the custom icon (png) | <none -defaults to the original icon> |
+| OTS_IMAGE_LOGO | link to the custom logo (png) | <none -defaults to the original logo> |
+| OTS_COLOR | CSS color code (#XXXXXX) | #dd4a22 |
 
-*to do: add logo, icon and style related env vars*
 
 ### OpenShift deployment config
 *to do*

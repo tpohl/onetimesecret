@@ -1,6 +1,8 @@
 #!/bin/sh
 
 CFG=/etc/onetime/config
+WEBFILES=/source/onetime/public/web
+CSS=$WEBFILES/css/main.css
 
 echo "##### Performing vars check #####"
 for VAR in $OTS_DOMAIN $OTS_MASTER_KEY $OTS_REDIS_USER $OTS_REDIS_HOST $OTS_REDIS_PORT $OTS_ADMIN_EMAIL; do
@@ -33,18 +35,19 @@ sed -i "s/__OTS_SHOW_SECRET/$OTS_SHOW_SECRET/g" $CFG
 sed -i "s/__OTS_BURN_SECRET/$OTS_BURN_SECRET/g" $CFG
 
 echo "##### Apply style customisations #####"
-$OTS_FAV_ICON
-$OTS_
-# remove malinator info box
-# remove email/account info box
-# remove send feedback box
-# enable api? -> then accounting is also needed
-# change code,issues link
-# remove social stuff
-# change font
-# get source from my fork
-# set variables in css to replace them
-
+if [ ! -z "$OTS_IMAGE_FAV_ICON" ]; then
+  rm -r $WEBFILES/img/favicon.png
+  curl -o $WEBFILES/img/favicon.png $OTS_IMAGE_FAV_ICON
+fi
+if [ ! -z "$OTS_IMAGE_LOGO" ]; then
+  rm -r $WEBFILES/img/logo.png
+  curl -o $WEBFILES/img/logo.png $OTS_IMAGE_LOGO
+fi
+if [ ! -z "$OTS_COLOR" ]; then
+  sed -i "s/__OTS_BANNER_COLOR/$OTS_COLOR/g" $CSS
+  sed -i "s/__OTS_BUTTON_COLOR/$OTS_COLOR/g" $CSS
+  sed -i "s/__OTS_BORDER_COLOR/$OTS_COLOR/g" $CSS
+fi
 
 echo "Starting OTS"
 exec bundle exec thin -e dev -R config.ru -p 7143 start
