@@ -1,6 +1,17 @@
 ---
 # PVC for redis data
-
+apiVersion: "v1"
+kind: "PersistentVolumeClaim"
+metadata:
+  name: "ots-data"
+  namespace: ots
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "1Gi"
+  volumeName: "some-pv"
 ---
 # Service
 apiVersion: v1
@@ -195,7 +206,7 @@ spec:
       volumes:
       - name: redis-pv-data
         persistentVolumeClaim:
-          claimName: ots-redis
+          claimName: ots-data
   test: false
   triggers:
   - type: ConfigChange
