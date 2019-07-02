@@ -51,8 +51,7 @@ POST  /private/:key/burn                         Onetime::App#burn_secret
 # POST  /account/apikey                            Onetime::App#generate_apikey
 # POST  /account/subdomain                         Onetime::App#update_subdomain
 
-# GET   /contributor                               Onetime::App#contributors
-# POST  /contributor                               Onetime::App#contributors
+
 
 # GET   /translations                              Onetime::App#translations
 

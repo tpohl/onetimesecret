@@ -1,0 +1,214 @@
+---
+# PVC for redis data
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ots
+  name: ots
+  namespace: public-services
+spec:
+  ports:
+  - name: ots
+    port: 7143
+    protocol: TCP
+    targetPort: 7143
+  selector:
+    app: ots
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+---
+# Route
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: 2019-06-19T19:10:48Z
+  labels:
+    app: ots
+  name: ots
+  namespace: public-services
+  resourceVersion: "8730023"
+  selfLink: /apis/route.openshift.io/v1/namespaces/public-services/routes/ots
+  uid: f28dde88-92c5-11e9-aa8e-960000261c4c
+spec:
+  host: ots.apps.replicas.io
+  port:
+    targetPort: ots
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: ots
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: 2019-06-19T19:10:48Z
+      status: "True"
+      type: Admitted
+    host: ots.apps.replicas.io
+    routerName: router
+    wildcardPolicy: None
+
+---
+# Secret for encryption master key and redis authentication
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  otsMasterKey: <some super long string - base64 encoded>
+  otsRedisPW: <some super long string - base64 encoded>
+metadata:
+  labels:
+    app: ots
+  name: ots-secrets
+  namespace: public-services
+
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: ots
+  name: ots
+  namespace: public-services
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    app: ots
+    deploymentconfig: ots
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ots
+        deploymentconfig: ots
+    spec:
+      containers:
+      - env:
+        - name: OTS_DOMAIN
+          value: ots.apps.replicas.io
+        - name: OTS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              key: otsMasterKey
+              name: ots-secrets
+        - name: OTS_REDIS_PW
+          valueFrom:
+            secretKeyRef:
+              key: otsRedisPW
+              name: ots-secrets
+        - name: OTS_REDIS_HOST
+          value: 127.0.0.1
+        - name: OTS_REDIS_PORT
+          value: "7179"
+        - name: OTS_IMAGE_FAV_ICON
+          value: https://img.lovepik.com/element/40054/5289.png_860.png
+        - name: OTS_IMAGE_LOGO
+          value: https://img.lovepik.com/element/40054/5289.png_860.png
+        - name: OTS_COLOR
+          value: '#f7dc6f'
+        image: docker-registry.default.svc:5000/public-services/ots:develop
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /404.html
+            port: 7143
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: ots-app
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /404.html
+            port: 7143
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - command:
+        - /bin/sh
+        - -c
+        - redis-server --dir /data --requirepass $OTS_REDIS_PW --bind $OTS_REDIS_HOST
+          --port $OTS_REDIS_PORT --databases 16 --timeout 30 --daemonize no --loglevel
+          notice --save 157680000 1 --rdbcompression yes --appendonly yes --appendfsync
+          everysec
+        env:
+        - name: OTS_REDIS_PW
+          valueFrom:
+            secretKeyRef:
+              key: otsRedisPW
+              name: ots-secrets
+        - name: OTS_REDIS_HOST
+          value: 127.0.0.1
+        - name: OTS_REDIS_PORT
+          value: "7179"
+        image: redis:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - redis-cli -h $OTS_REDIS_HOST -p $OTS_REDIS_PORT -a $OTS_REDIS_PW ping
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: ots-redis
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - redis-cli -h $OTS_REDIS_HOST -p $OTS_REDIS_PORT -a $OTS_REDIS_PW ping
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data
+          name: redis-pv-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: redis-pv-data
+        persistentVolumeClaim:
+          claimName: ots-redis
+  test: false
+  triggers:
+  - type: ConfigChange
