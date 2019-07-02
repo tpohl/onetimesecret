@@ -28,14 +28,10 @@ status:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  creationTimestamp: 2019-06-19T19:10:48Z
   labels:
     app: ots
   name: ots
   namespace: public-services
-  resourceVersion: "8730023"
-  selfLink: /apis/route.openshift.io/v1/namespaces/public-services/routes/ots
-  uid: f28dde88-92c5-11e9-aa8e-960000261c4c
 spec:
   host: ots.apps.replicas.io
   port:
@@ -47,15 +43,6 @@ spec:
     name: ots
     weight: 100
   wildcardPolicy: None
-status:
-  ingress:
-  - conditions:
-    - lastTransitionTime: 2019-06-19T19:10:48Z
-      status: "True"
-      type: Admitted
-    host: ots.apps.replicas.io
-    routerName: router
-    wildcardPolicy: None
 
 ---
 # Secret for encryption master key and redis authentication
