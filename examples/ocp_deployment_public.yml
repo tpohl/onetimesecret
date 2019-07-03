@@ -4,14 +4,14 @@ apiVersion: "v1"
 kind: "PersistentVolumeClaim"
 metadata:
   name: "ots-data"
-  namespace: ots
+  namespace: test-ots
 spec:
   accessModes:
     - "ReadWriteOnce"
   resources:
     requests:
       storage: "1Gi"
-  volumeName: "some-pv"
+  volumeName: "pv0001"
 ---
 # Service
 apiVersion: v1
@@ -20,7 +20,7 @@ metadata:
   labels:
     app: ots
   name: ots
-  namespace: public-services
+  namespace: test-ots
 spec:
   ports:
   - name: ots
@@ -42,9 +42,9 @@ metadata:
   labels:
     app: ots
   name: ots
-  namespace: public-services
+  namespace: test-ots
 spec:
-  host: ots.apps.replicas.io
+  #host: ots.apps.replicas.io
   port:
     targetPort: ots
   tls:
@@ -56,18 +56,19 @@ spec:
   wildcardPolicy: None
 
 ---
-# Secret for encryption master key and redis authentication
+# Secret for encryption master key and redis authentication, gets set as env vars for containers
+# Base64 encoded
 apiVersion: v1
 kind: Secret
 type: Opaque
 data:
-  otsMasterKey: <some super long string - base64 encoded>
-  otsRedisPW: <some super long string - base64 encoded>
+  otsMasterKey: QVk4aGh4ZlNwUHJ2YzJORVMyRms3eWdIVVRSaUd0WVZlNW9ubUVoUWoyZ2dnNDVDZ05iUmNTcm04ZHJBb0o2bg==
+  otsRedisPW: blFrS2lmWGlUVFJENW1MN0gyWW9DUnlSWWhSb1ZiTW83a1lkTWlpNmRqbmVCdVIyRzN4U0syVWFuU3U2WWFZWA==
 metadata:
   labels:
     app: ots
   name: ots-secrets
-  namespace: public-services
+  namespace: test-ots
 
 ---
 apiVersion: apps.openshift.io/v1
@@ -76,7 +77,7 @@ metadata:
   labels:
     app: ots
   name: ots
-  namespace: public-services
+  namespace: test-ots
 spec:
   replicas: 1
   revisionHistoryLimit: 2
