@@ -124,7 +124,7 @@ spec:
           value: https://img.lovepik.com/element/40054/5289.png_860.png
         - name: OTS_COLOR
           value: '#f7dc6f'
-        image: docker-registry.default.svc:5000/public-services/ots:develop
+        image: siw36/onetimesecret:develop
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
