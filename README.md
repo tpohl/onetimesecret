@@ -39,4 +39,4 @@ The container can and should be run unprivileged (leveraging the OCP arbitrary u
 
 
 ### OpenShift deployment config
-*to do*
+You can find an example template for OTS on OCP in the examples folder.
