@@ -20,7 +20,7 @@
     body {
       padding-top: 0px;
       padding-bottom: 10px;
-      font-family: georgia,serif;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     /* Custom container */
     .container-narrow {
@@ -73,10 +73,12 @@
       margin: 20px 0;
     }
     #logo {
-      background-image: url('/img/logo-48.png');
-      display: inline-block;
-      width: 48px;
+      background-image: url('/img/logo.png');
+      /* display: inline-block; */
+      /* width: 48px; */
       height: 48px;
+      background-repeat: no-repeat;
+      background-size: auto 48px;
     }
     /* Landscape phones and down */
     @media (max-width: 480px) {
@@ -84,10 +86,12 @@
 
       }
       #logo {
-        background-image: url('/img/logo-36.png');
-        display: inline-block;
-        width: 36px;
+        background-image: url('/img/logo.png');
+        /* display: inline-block; */
+        /* width: 36px; */
         height: 36px;
+        background-repeat: no-repeat;
+        background-size: auto 36px;
       }
       .masthead .nav {
         margin-top: 18px;
@@ -147,4 +151,3 @@
     <a href="http://www.youtube.com/watch?v=1V6T0lJc3dU" title="Release {{ot_version}}" tabIndex="-1" class="release">&nbsp;</a>
     <a href="/"><h3 id="logo"></h3></a>
   </div>
-

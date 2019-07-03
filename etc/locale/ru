@@ -61,9 +61,9 @@
     :secret_form_more_text2: "бесплатную учётную запись"
     :secret_form_more_text3: "чтобы устанавливать фразы-пропуска для пущей безопасности, а также для дополнительных настроек приватности. Мы даже отправим вам ссылку, если хотите."
     :anon_info1: "Оставайтесь анонимными!"
-    :anon_info2: "Создать учётную запись, используя "
-    :anon_info3: "временный адрес эл.почты"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Поделиться этой ссылкой:"
     :requires_passphrase: "Требуется пароль."

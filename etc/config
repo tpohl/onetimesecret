@@ -1,23 +1,23 @@
 :site:
-  :host: localhost:7143
-  :domain: localhost
-  :ssl: false
-  # NOTE Once the secret is set, do not change it (keep a backup offsite)
-  :secret: CHANGEME
+  :host: __OTS_DOMAIN
+  :domain: __OTS_DOMAIN
+  :ssl: __OTS_SSL
+  :secret: __OTS_MASTER_KEY
 :redis:
-  :uri: 'redis://user:CHANGEME@127.0.0.1:7179/0?timeout=10&thread_safe=false&logging=false'
+  :uri: 'redis://user:__OTS_REDIS_PW@__OTS_REDIS_HOST:__OTS_REDIS_PORT/0?timeout=10&thread_safe=false&logging=false'
   :config: /etc/onetime/redis.conf
 :colonels:
-  # Accounts created with the following email addresses
-  # are automatically considered admins of the system.
-  - CHANGEME@EXAMPLE.com
+  - __OTS_ADMIN_EMAIL
 :emailer:
-  :mode: :sendgrid
-  :account: CHANGEME
-  :password: CHANGEME
-  :from: CHANGEME@example.com
-  :fromname: CHANGEME
-  :bcc:
+  :enabled: false
+# Remove examples from this config and mention it in README (less inline guides!)
+#:emailer:
+#  :mode: :sendgrid
+#  :account: CHANGEME
+#  :password: CHANGEME
+#  :from: CHANGEME@example.com
+#  :fromname: CHANGEME
+#  :bcc:
 # Use the following email config to enable SMTP
 # support and remove the :emailer config above.
 #:emailer:
@@ -58,32 +58,19 @@
   - jp
 :stathat:
   :enabled: false
-  :apikey: CHANGEME
-  :default_chart: CHANGEME
 :text:
   :nonpaid_recipient_text: 'You need to create an account!'
   :paid_recipient_text: 'Send the secret link via email'
 :limits:
-  :create_secret: 250
-  :create_account: 10
-  :update_account: 10
-  :email_recipient: 50
-  :send_feedback: 10
-  :authenticate_session: 5
-  :homepage: 500
-  :dashboard: 1000
-  :failed_passphrase: 5
-  :show_metadata: 1000
-  :show_secret: 1000
-  :burn_secret: 1000
-#:split_tests:
-#  :initial_pricing:
-#    - - basic_v1
-#      - professional_v1
-#      - agency_v1
-#    - - basic_v1
-#      - professional_v2
-#      - agency_v1
-#    - - basic_v1
-#      - professional_v2
-#      - agency_v2
+  :create_secret: __OTS_CREATE_SECRET
+  :create_account: __OTS_CREATE_ACCOUNT
+  :update_account: __OTS_UPDATE_ACCOUNT
+  :email_recipient: __OTS_EMAIL_RECIPIENT
+  :send_feedback: __OTS_SEND_FEEDBACK
+  :authenticate_session: __OTS_AUTHENTICATE_SESSION
+  :homepage: __OTS_HOMEPAGE
+  :dashboard: __OTS_DASHBOARD
+  :failed_passphrase: __OTS_FAILED_PASSPHRASE
+  :show_metadata: __OTS_SHOW_METADATA
+  :show_secret: __OTS_SHOW_SECRET
+  :burn_secret: __OTS_BURN_SECRET

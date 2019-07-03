@@ -13,24 +13,6 @@
 
         <div class="tab-pane active" id="home">
 
-          {{#new_account}}
-          <div id="signupSteps">
-            <div id="step1" class="step">
-              <p>Step 1:</p>
-              <div>Create Account</div>
-            </div>
-            <div id="step2" class="step">
-              <p>Step 2:</p>
-              <div>Verify Account</div>
-            </div>
-            <div id="step3" class="step">
-              <p>Step 3:</p>
-              <div>Share Secret</div>
-            </div>
-          </div>
-          <a href="#" class="secretToggle">{{i18n.COMMON.share_a_secret}}</a>
-          {{/new_account}}
-
           {{>partial/create_secret_form}}
 
         </div>

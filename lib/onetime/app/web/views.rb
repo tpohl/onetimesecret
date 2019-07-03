@@ -39,7 +39,6 @@ module Onetime
         self[:ot_version_id] = self[:ot_version].gibbler.short
         self[:authenticated] = sess.authenticated? if sess
         self[:display_promo] = false
-        self[:display_feedback] = true
         self[:colonel] = cust.role?(:colonel) if cust
         self[:feedback_text] = OT.conf[:text][:feedback]
         self[:nonpaid_recipient_text] = OT.conf[:text][:nonpaid_recipient_text]
@@ -62,7 +61,6 @@ module Onetime
           self[:subdomain]['company_domain'] = tmp.company_domain || 'One-Time Secret'
           self[:subdomain]['company'] = "One-Time Secret"
           self[:subtitle] = self[:subdomain]['company'] || self[:subdomain]['company_domain']
-          self[:display_feedback] = sess.authenticated?
           self[:display_icons] = sess.authenticated?
           self[:display_faq] = false
           self[:actionable_visitor] = sess.authenticated?
@@ -225,7 +223,6 @@ module Onetime
           self[:monitored_link] = !self[:is_subdomain]
           self[:with_analytics] = false
           self[:incoming_recipient] = OT.conf[:incoming][:email]
-          self[:display_feedback] = self[:display_icons] = false
           self[:display_masthead] = self[:display_links] = false
         end
       end
@@ -276,14 +273,12 @@ module Onetime
       class UnknownSecret < Onetime::App::View
         def init
           self[:title] = "No such secret"
-          self[:display_feedback] = false
         end
       end
       class Shared < Onetime::App::View
         def init
           self[:title] = "You received a secret"
           self[:body_class] = :generate
-          self[:display_feedback] = false
           self[:display_sitenav] = false
           self[:display_links] = false
           self[:display_icons] = false
@@ -310,7 +305,6 @@ module Onetime
           self[:secret_key] = metadata.secret_key
           self[:secret_shortkey] = metadata.secret_shortkey
           self[:recipients] = metadata.recipients
-          self[:display_feedback] = false
           self[:no_cache] = true
           # Metadata now lives twice as long as the original secret.
           # Prior to the change they had the same value so we can
@@ -378,7 +372,6 @@ module Onetime
           self[:secret_shortkey] = metadata.secret_shortkey
           self[:state] = metadata.state
           self[:recipients] = metadata.recipients
-          self[:display_feedback] = false
           self[:no_cache] = true
           self[:show_metadata] = !metadata.state?(:viewed) || metadata.owner?(cust)
           secret = metadata.load_secret
@@ -576,7 +569,6 @@ module Onetime
           self[:body_class] = :info
           self[:monitored_link] = true
           self[:with_analytics] = false
-          self[:display_feedback] = false
           #self[:popular_feedback] = OT::Feedback.popular.collect do |k,v|
           #  {:msg => k, :stamp => natural_time(v) }
           #end

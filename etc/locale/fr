@@ -61,9 +61,9 @@
     :secret_form_more_text2: "compte gratuit"
     :secret_form_more_text3: "pour utiliser des mots de passe à sécurité accrue et acccéder à des options supplémentaires de confidentialité. Nous vous enverrons même le lien par email si vous le soouhaitez."
     :anon_info1: "Restez anonyme"
-    :anon_info2: "Créer un compte en utilisant"
-    :anon_info3: "une adresse email temporaire"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Partager ce lien:"
     :requires_passphrase: "Demande un mot de de passe."

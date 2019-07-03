@@ -62,9 +62,9 @@
     :secret_form_more_text2: "una cuenta gratuita"
     :secret_form_more_text3: "y poder fijar frases de contraseña para mayor seguridad junto con opciones de privacidad adicionales. Incluso enviaremos el enlace por correo electrónico si usted lo desea."
     :anon_info1: "¡Permanece anónimo!"
-    :anon_info2: "Crear una cuenta usando una"
-    :anon_info3: "dirección de correo electrónico efímera"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+    
   :private:
     :pretext: "Comparte este enlace:"
     :requires_passphrase: "Requiere una contraseña."

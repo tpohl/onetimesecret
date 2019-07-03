@@ -17,7 +17,7 @@
     body {
       padding-top: 0px;
       padding-bottom: 10px;
-      font-family: georgia,serif;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     /* Custom container */
     .container-narrow {
@@ -70,10 +70,12 @@
       margin: 20px 0;
     }
     #logo {
-      background-image: url('/img/logo-48.png');
-      display: inline-block;
-      width: 48px;
+      background-image: url('/img/logo.png');
+      /* display: inline-block; */
+      /* width: 48px; */
       height: 48px;
+      background-repeat: no-repeat;
+      background-size: auto 48px;
     }
     @media (min-width: 481px) {
       #contentTab {
@@ -86,10 +88,12 @@
 
       }
       #logo {
-        background-image: url('/img/logo-36.png');
-        display: inline-block;
-        width: 36px;
+        background-image: url('/img/logo.png');
+        /* display: inline-block; */
+        /* width: 36px; */
         height: 36px;
+        background-repeat: no-repeat;
+        background-size: auto 36px;
       }
       .masthead .nav {
         margin-top: 18px;
@@ -125,9 +129,7 @@
 
   <div class="masthead">
     <div class="nav pull-right">
-        <a href="/signup" title="Signup - Individual and Business plans" class="active">Create Account</a> |
         <a href="/about" title="About One-Time Secret">About</a> |
-        <a href="/login" title="Log in to One-Time Secret">Sign In</a>
     </div>
     <a href="/"><h3 id="logo"></h3></a>
   </div>
@@ -161,26 +163,9 @@
       </div>
     </form>
     <p class="footerNav">
-      <a href="/about">About</a> |
-      <a href="/translations">Help Translate</a> |
-      <a href="/docs/api">API</a> |
-      <a href="https://github.com/onetimesecret/onetimesecret">Code</a> |
-      <a href="https://github.com/onetimesecret/onetimesecret/issues" title="Issue Tracker">Issues</a>
+      <a href="https://github.com/siw36/onetimesecret">Code</a> |
+      <a href="https://github.com/siw36/onetimesecret/issues" title="Issue Tracker">Issues</a>
     </p>
-    <p class="footerNav">
-      <a href="/info/privacy">Privacy</a> |
-      <a href="/info/terms">Terms &amp; Conditions</a> |
-      <a href="/contributor">Contributors</a> |
-      <a href="/info/security">Security</a>
-    </p>
-    <div class="tagline">
-      Follow our latest news:
-      <p>
-        <a href="https://www.facebook.com/pages/One-Time-Secret/284990691536190" title="Join us on Facebook"><img class="socialicon" src="/img/icon-facebook.png" height="16" width="16" alt="facebook icon" /></a>
-        <a href="https://twitter.com/onetimesecret" title="Join us on Twitter"><img class="socialicon" src="/img/icon-twitter.png" height="16" width="16" alt="twitter icon" /></a>
-      </p>
-      <p class="release"></p>
-    </div>
 
   </div>
 
@@ -197,4 +182,3 @@
 
 </body>
 </html>
-

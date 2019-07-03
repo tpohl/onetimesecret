@@ -61,9 +61,9 @@
     :secret_form_more_text2: "безплатен акаунт"
     :secret_form_more_text3: "да поставите фрази за по-добра защита, както и допълнителни опции за поверителност. Дори, ще ви изпратим връзката по и-мейл, ако искате."
     :anon_info1: "Останете анонимни!"
-    :anon_info2: "Създайте акаунт, като използвате "
-    :anon_info3: "временен и-мейл адрес"
-    :anon_info4: "."
+    :get_ots0: "Deploy your own"
+    :get_ots1: "Containerized One Time Secret"
+
   :private:
     :pretext: "Сподели тази връзка:"
     :requires_passphrase: "Изисква фраза."

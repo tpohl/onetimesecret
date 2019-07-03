@@ -89,7 +89,7 @@ module Onetime
       else
         raise RuntimeError, "Unknown encryption mode: #{value_encryption}"
       end
-      v_decrypted.force_encoding("utf-8") # Hacky fix for https://github.com/onetimesecret/onetimesecret/issues/37
+      v_decrypted.force_encoding("utf-8") # Hacky fix for https://github.com/siw36/onetimesecret/issues/37
       v_decrypted
     end
     def can_decrypt?

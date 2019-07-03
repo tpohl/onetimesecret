@@ -6,7 +6,7 @@ class Onetime::App
     include Onetime::App::API::Base
 
     def status
-      authorized(true) do
+      authorized(true||false) do
         sess.event_incr! :check_status
         json :status => :nominal, :locale => locale
       end
