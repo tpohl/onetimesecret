@@ -4,10 +4,7 @@ FROM registry.redhat.io/rhscl/ruby-26-rhel7:latest
 USER 0
 
 # Dependencies
-RUN yum -y install gcc-c++ patch readline readline-devel zlib zlib-devel \
-   libyaml-devel libffi-devel openssl-devel make \
-   bzip2 autoconf automake libtool bison iconv-devel sqlite-devel \
-  && yum -y install \
+RUN yum -y install \
     tar \
     gzip \
     bzip2 \
@@ -18,16 +15,7 @@ RUN yum -y install gcc-c++ patch readline readline-devel zlib zlib-devel \
     libevent-devel \
     libyaml-devel \
     zlib-devel \
-  && yum clean all \
-  && curl -sSL https://rvm.io/mpapis.asc | gpg2 --import - \
-  && curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import - \
-  && curl -L get.rvm.io | bash -s stable \
-  && source /etc/profile.d/rvm.sh \
-  && rvm reload \
-  && rvm requirements run \
-  && rvm install 2.6 \
-  && rvm use 2.6 --default \
-  && gem install bundler \
+  && yum clean all
 
 # OTS
 RUN mkdir -p /var/log/onetime /var/run/onetime /var/lib/onetime /etc/onetime /opt/app-root/src
