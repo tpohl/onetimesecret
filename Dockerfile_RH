@@ -3,8 +3,8 @@ FROM ruby:latest
 USER 0
 
 # Dependencies
-RUN yum -y install rubygems \
-  rubygem-bundler
+RUN yum -y install rubygems rubygem-bundler ruby-devel \
+  && yum clean all
 
 # OTS
 RUN mkdir -p /var/log/onetime /var/run/onetime /var/lib/onetime /etc/onetime /source/onetime
