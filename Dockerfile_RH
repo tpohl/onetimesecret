@@ -4,7 +4,7 @@ USER 0
 
 # Dependencies
 RUN yum -y install rubygems \
-  && gem install bundler
+  rubygem-bundler
 
 # OTS
 RUN mkdir -p /var/log/onetime /var/run/onetime /var/lib/onetime /etc/onetime /source/onetime
