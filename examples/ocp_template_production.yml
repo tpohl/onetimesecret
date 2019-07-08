@@ -1,0 +1,403 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: ots-template
+  annotations:
+    description: "OneTimeSecret AIO"
+    iconClass: "icon-redis"
+    tags: "secret,onetime,redis,oauth"
+objects:
+
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: ${NAME}
+      app: ${NAME}
+      namespace: ${NAMESPACE}
+      labels:
+        build: ${NAME}
+
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      name: ${NAME}
+      app: ${NAME}
+      namespace: ${NAMESPACE}
+      labels:
+        build: ${NAME}
+    spec:
+      failedBuildsHistoryLimit: 2
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${NAME}:latest
+      runPolicy: Serial
+      source:
+        git:
+          uri: https://github.com/siw36/onetimesecret
+        type: Git
+      strategy:
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: ruby:latest
+        type: Docker
+      successfulBuildsHistoryLimit: 1
+      triggers:
+      - type: ConfigChange
+
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      annotations:
+        serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${NAME}"}}'
+      name: ${NAME}
+      app: ${NAME}
+      namespace: ${NAMESPACE}
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: sec-${NAME}-tls
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      ports:
+      - name: ${NAME}-auth
+        port: 443
+        protocol: TCP
+        targetPort: 8443
+      selector:
+        app: ${NAME}
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      host: ${HOSTNAME}
+      port:
+        targetPort: ${NAME}-auth
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: Reencrypt
+      to:
+        kind: Service
+        name: ${NAME}
+        weight: 100
+      wildcardPolicy: None
+
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    stringData:
+      otsMasterKey: ${OTS_SECRET}
+      otsRedisPW: ${REDIS_SECRET}
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}-secrets
+      namespace: ${NAMESPACE}
+
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${NAMW}-data
+      namespace: ${NAMESPACE}
+      annotations:
+        volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: ${REDIS_PVC}
+
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 2
+      selector:
+        app: ${NAME}
+        deploymentconfig: ${NAME}
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${NAME}
+            deploymentconfig: ${NAME}
+        spec:
+          serviceAccountName: ${NAME}
+          nodeSelector:
+            ${NODE_SELECTOR_LABEL}: ${NODE_SELECTOR_VALUE}
+          containers:
+
+          # OCP oauth proxy
+          - name: ${NAME}-proxy
+            image: registry.access.redhat.com/openshift3/oauth-proxy:latest
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 8443
+              name: web
+            args:
+            - --provider=openshift
+            - --https-address=:8443
+            - --http-address=${HOSTNAME}
+            - --email-domain=*
+            - --cookie-name=oauth2_ots
+            - --upstream=http://localhost:7143
+            - --client-id=system:serviceaccount:${NAMESPACE}:${NAME}
+            - --openshift-ca=/etc/pki/tls/cert.pem
+            - --openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            - --openshift-service-account=${NAME}
+            - '--openshift-sar={"resource": "namespaces", "verb": "get", "resourceName": "${NAMESPACE}", "namespace": "${NAMESPACE}"}'
+            - --tls-cert=/etc/tls/private/tls.crt
+            - --tls-key=/etc/tls/private/tls.key
+            - --client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
+            - --cookie-secret-file=/etc/proxy/secrets/session_secret
+            - --cookie-domain=${DOMAIN}
+            - --cookie-expire=8h0m0s
+            - --footer=-
+            volumeMounts:
+            - mountPath: /etc/tls/private
+              name: ${NAME}-tls
+            - mountPath: /etc/proxy/secrets
+              name: ${NAME}-proxy
+            - mountPath: /etc/pki/tls/
+              name: cluster-cert
+              readOnly: true
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /oauth/healthz
+                port: 8443
+                scheme: HTTPS
+              initialDelaySeconds: 20
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 10
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /oauth/healthz
+                port: 8443
+                scheme: HTTPS
+              initialDelaySeconds: 20
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 10
+            resources:
+              limits:
+                cpu: 150m
+                memory: 150Mi
+              requests:
+                cpu: 100m
+                memory: 100Mi
+            securityContext:
+              capabilities: {}
+              privileged: false
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+
+          # OTS APP
+          - env:
+            - name: OTS_DOMAIN
+              value: ${HOSTNAME}
+            - name: OTS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: otsMasterKey
+                  name: ${NAME}-secrets
+            - name: OTS_REDIS_PW
+              valueFrom:
+                secretKeyRef:
+                  key: otsRedisPW
+                  name: ${NAME}-secrets
+            - name: OTS_REDIS_HOST
+              value: 127.0.0.1
+            - name: OTS_REDIS_PORT
+              value: "7179"
+            - name: OTS_IMAGE_FAV_ICON
+              value: ${FAV_ICON}
+            - name: OTS_IMAGE_LOGO
+              value: ${LOGO}
+            - name: OTS_COLOR
+              value: '#f7dc6f'
+            image: docker-registry.default.svc:5000/${NAMESPACE}/${NAME}:latest
+            imagePullPolicy: Always
+            resources:
+              limits:
+                cpu: 150m
+                memory: 150Mi
+              requests:
+                cpu: 100m
+                memory: 100Mi
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /404.html
+                port: 7143
+                scheme: HTTP
+              initialDelaySeconds: 10
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 5
+            name: ${NAME}-app
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /404.html
+                port: 7143
+                scheme: HTTP
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+
+          # Redis
+          - command:
+            - /bin/sh
+            - -c
+            - redis-server --dir /data --requirepass $OTS_REDIS_PW --bind $OTS_REDIS_HOST
+              --port $OTS_REDIS_PORT --databases 16 --timeout 30 --daemonize no --loglevel
+              notice --save 157680000 1 --rdbcompression yes --appendonly yes --appendfsync
+              everysec
+            env:
+            - name: OTS_REDIS_PW
+              valueFrom:
+                secretKeyRef:
+                  key: otsRedisPW
+                  name: ${NAME}-secrets
+            - name: OTS_REDIS_HOST
+              value: 127.0.0.1
+            - name: OTS_REDIS_PORT
+              value: "7179"
+            image: redis:latest
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: 150m
+                memory: 150Mi
+              requests:
+                cpu: 100m
+                memory: 100Mi
+            livenessProbe:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - redis-cli -h $OTS_REDIS_HOST -p $OTS_REDIS_PORT -a $OTS_REDIS_PW ping
+              failureThreshold: 3
+              initialDelaySeconds: 10
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1
+            name: ots-redis
+            readinessProbe:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - redis-cli -h $OTS_REDIS_HOST -p $OTS_REDIS_PORT -a $OTS_REDIS_PW ping
+              failureThreshold: 3
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /data
+              name: redis-pv-data
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - name: redis-pv-data
+            persistentVolumeClaim:
+              claimName: ${NAME}-data
+          - name: ots-proxy
+            secret:
+              secretName: sec-${NAME}-proxy
+          - name: ots-tls
+            secret:
+              secretName: sec-${NAME}-tls
+          - name: cluster-cert
+            secret:
+              defaultMode: 420
+              secretName: cluster-selfsigned-cert
+      test: false
+      triggers:
+      - type: ConfigChange
+
+parameters:
+- name: NODE_SELECTOR_LABEL
+  description: Node selector label for the deployment
+  value: zone
+- name: NODE_SELECTOR_VALUE
+  description: Node selector value for the deployment
+  value: app
+- name: NAMESPACE
+  description: Namespace
+- name: NAME
+  description: Name for the new OTS APP
+  value: ots
+- name: DOMAIN
+  description: The cluster domain
+  value: apps.my-cluster.io
+- name: HOSTNAME
+  description: The route host
+  value: ots.apps.my-cluster.io
+- name: OTS_SECRET
+  description: OneTimeSecret master key used as salt in combination with user secret to encrypt secret data
+  from: '[A-Za-z0-9]{32}'
+  generate: expression
+- name: REDIS_SECRET
+  description: Redis password for login
+  from: '[A-Za-z0-9]{32}'
+  generate: expression
+- name: STORAGE_CLASS
+  description: OCP storage class to use for Redis PVC (oc get sc)
+- name: REDIS_PVC
+  description: Redis PVC size
+  value: '1Gi'
+- name: IMAGE_TAG
+  description: Docker image tag
+  value: latest
+- name: FAV_ICON
+  description: The favorite icon for the deployment (png)
+  value: https://some.domain.io/favicon.png
+- name: LOGO
+  description: The logo for the website (png)
+  value: https://some.domain.io/company_logo.png
+
+
+labels:
+  redis: master
