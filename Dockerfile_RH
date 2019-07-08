@@ -15,8 +15,8 @@ RUN yum -y install \
     libevent-devel \
     libyaml-devel \
     zlib-devel \
-    ruby \
-    ruby-devel \
+    rh-ruby23 \
+    rh-ruby23-ruby-devel \
     rubygems \
     rubygem-bundler \
   && yum clean all \
