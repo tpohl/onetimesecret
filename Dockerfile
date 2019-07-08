@@ -1,8 +1,5 @@
 FROM ruby:latest
 
-RUN mkdir -p /opt/onetimesecret
-WORKDIR /opt/onetimesecret
-
 # Dependencies
 RUN apt-get update \
   && apt-get -y install --no-install-recommends \
