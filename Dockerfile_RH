@@ -1,20 +1,25 @@
-# Based in ubi7/ubi-minimal:latest from registry.access.redhat.com
-FROM registry.access.redhat.com/ubi7/ubi-minimal:latest
+# Based in rhel7-minimal:latest from registry.access.redhat.com
+FROM registry.access.redhat.com/rhel7-minimal:latest
 
 USER 0
 
 # Dependencies
-RUN microdnf --nodocs install \
+RUN yum -y install \
     tar \
     gzip \
     bzip2 \
     openssl \
     curl \
+    openssl-devel \
+    readline-devel \
+    libevent-devel \
+    libyaml-devel \
+    zlib-devel \
     ruby \
     ruby-devel \
     rubygems \
     rubygem-bundler \
-  && microdnf clean all \
+  && yum clean all \
   && gem install bundler
 
 # OTS
