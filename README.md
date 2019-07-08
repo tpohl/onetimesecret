@@ -8,10 +8,11 @@ This repository is a fork of th awesome project onetimesecret (https://onetimese
 - Customizable for your project/company (through environment variables)
 
 ### Image details
-- Base image: `ruby:latest` <img src="https://www.ruby-lang.org/favicon.ico" alt="Ruby Icon" height="20"/>
+- Base image: `ruby:latest` (Dockerhub) <img src="https://www.ruby-lang.org/favicon.ico" alt="Ruby Icon" height="20"/>
 - This image is designed to run on Kubernetes/OpenShift __together with a REDIS container in a pod (see examples)__.  
 - The container can and should be run unprivileged (leveraging the OCP arbitrary user ID feature).  
 - Pre build docker image: [siw36/onetimesecret](https://hub.docker.com/r/siw36/onetimesecret) <img src="https://www.docker.com/favicon.ico" alt="Docker Icon" height="25"/>  
+- Use the `Dockerfile_RH`, if you want to deploy OTS on top of the RedHat ruby:latest image instead of the one from Dockerhub
 
 
 ### Variables
