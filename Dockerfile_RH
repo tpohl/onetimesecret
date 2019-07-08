@@ -1,11 +1,20 @@
 # Based in ruby:latest from registry.access.redhat.com
-FROM ruby:latest
+FROM ubi7:latest
 
 USER 0
 
 # Dependencies
-RUN yum -y install rubygems rubygem-bundler \
-  && yum clean all
+RUN microdnf --nodocs install \
+    tar \
+    gzip \
+    bzip2 \
+    openssl \
+    ruby \
+    ruby-devel \
+    rubygems \
+    rubygem-bundler \
+  && microdnf clean all \
+  && gem install bundler
 
 # OTS
 RUN mkdir -p /var/log/onetime /var/run/onetime /var/lib/onetime /etc/onetime /opt/app-root/src
