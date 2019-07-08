@@ -1,5 +1,5 @@
 # Based in ruby-26-rhel7:latest from registry.access.redhat.com
-FROM registry.access.redhat.com/rhel7.6:latest
+FROM registry.redhat.io/rhscl/ruby-26-rhel7:latest
 
 USER 0
 

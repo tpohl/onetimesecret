@@ -12,7 +12,7 @@ This repository is a fork of th awesome project onetimesecret (https://onetimese
 - This image is designed to run on Kubernetes/OpenShift __together with a REDIS container in a pod (see examples)__.  
 - The container can and should be run unprivileged (leveraging the OCP arbitrary user ID feature).  
 - Pre build docker image: [siw36/onetimesecret](https://hub.docker.com/r/siw36/onetimesecret) <img src="https://www.docker.com/favicon.ico" alt="Docker Icon" height="25"/>  
-- Use the `Dockerfile_RH`, if you want to deploy OTS on top of the RedHat rhel7.6:latest image instead of the one from Dockerhub (security reasons)
+- Use the `Dockerfile_RH`, if you want to deploy OTS on top of the RedHat ruby-26-rhel7:latest image instead of the one from Dockerhub (security reasons)
 
 
 ### Variables
