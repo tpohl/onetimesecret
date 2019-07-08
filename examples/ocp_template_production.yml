@@ -43,6 +43,7 @@ objects:
           from:
             kind: ImageStreamTag
             name: ruby:latest
+          dockerfilePath: ${DOCKERFILE}
         type: Docker
       successfulBuildsHistoryLimit: 1
       triggers:
@@ -369,6 +370,9 @@ parameters:
 - name: NAME
   description: Name for the new OTS APP
   value: ots
+- name: DOCKERFILE
+  description: Select a Docker file from source [Dockerfile|Dockerfile_RH]
+  value: Dockerfile
 - name: DOMAIN
   description: The cluster domain
   value: apps.my-cluster.io
