@@ -4,7 +4,8 @@ FROM registry.access.redhat.com/rhel7.6:latest
 USER 0
 
 # Dependencies
-RUN yum -y install \
+RUN scl enable rh-ruby23 bash \
+  && yum -y install \
     tar \
     gzip \
     bzip2 \
