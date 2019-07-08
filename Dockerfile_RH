@@ -1,5 +1,5 @@
-# Based in ruby:latest from registry.access.redhat.com
-FROM ubi7:latest
+# Based in ubi7/ubi-minimal:latest from registry.access.redhat.com
+FROM registry.access.redhat.com/ubi7/ubi-minimal:latest
 
 USER 0
 
@@ -9,6 +9,7 @@ RUN microdnf --nodocs install \
     gzip \
     bzip2 \
     openssl \
+    curl \
     ruby \
     ruby-devel \
     rubygems \
