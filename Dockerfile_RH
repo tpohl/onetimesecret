@@ -18,10 +18,6 @@ RUN yum -y install gcc-c++ patch readline readline-devel zlib zlib-devel \
     libevent-devel \
     libyaml-devel \
     zlib-devel \
-    ruby \
-    ruby-devel \
-    rubygems \
-    rubygem-bundler \
   && yum clean all \
   && curl -sSL https://rvm.io/mpapis.asc | gpg2 --import - \
   && curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import - \
