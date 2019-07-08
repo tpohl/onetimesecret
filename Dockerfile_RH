@@ -1,10 +1,12 @@
-# Based in rhel7.6:latest from registry.access.redhat.com
+# Based in ruby-26-rhel7:latest from registry.access.redhat.com
 FROM registry.access.redhat.com/rhel7.6:latest
 
 USER 0
 
 # Dependencies
-RUN scl enable rh-ruby23 bash \
+RUN yum -y install gcc-c++ patch readline readline-devel zlib zlib-devel \
+   libyaml-devel libffi-devel openssl-devel make \
+   bzip2 autoconf automake libtool bison iconv-devel sqlite-devel \
   && yum -y install \
     tar \
     gzip \
@@ -16,12 +18,20 @@ RUN scl enable rh-ruby23 bash \
     libevent-devel \
     libyaml-devel \
     zlib-devel \
-    rh-ruby23 \
-    rh-ruby23-ruby-devel \
+    ruby \
+    ruby-devel \
     rubygems \
     rubygem-bundler \
   && yum clean all \
-  && gem install bundler
+  && curl -sSL https://rvm.io/mpapis.asc | gpg2 --import - \
+  && curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import - \
+  && curl -L get.rvm.io | bash -s stable \
+  && source /etc/profile.d/rvm.sh \
+  && rvm reload \
+  && rvm requirements run \
+  && rvm install 2.6 \
+  && rvm use 2.6 --default \
+  && gem install bundler \
 
 # OTS
 RUN mkdir -p /var/log/onetime /var/run/onetime /var/lib/onetime /etc/onetime /opt/app-root/src
