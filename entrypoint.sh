@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Files
 CFG=/etc/onetime/config
@@ -53,5 +53,5 @@ if [ ! -z "$OTS_COLOR" ]; then
   sed -i "s/__OTS_BORDER_COLOR/$OTS_COLOR/g" $CSS
 fi
 
-echo "##### Starting OTS #####""
+echo "##### Starting OTS #####"
 exec bundle exec thin -e dev -R config.ru -p 7143 start
