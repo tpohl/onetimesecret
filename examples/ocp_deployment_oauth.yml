@@ -117,7 +117,7 @@ spec:
 
       # OCP oauth proxy
       - name: ots-proxy
-        image: registry.access.redhat.com/openshift3/oauth-proxy
+        image: registry.redhat.io/openshift3/oauth-proxy
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8443

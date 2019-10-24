@@ -126,7 +126,7 @@ objects:
 
           # OCP oauth proxy
           - name: ${NAME}-proxy
-            image: registry.access.redhat.com/openshift3/oauth-proxy:latest
+            image: registry.redhat.io/openshift3/oauth-proxy:latest
             imagePullPolicy: IfNotPresent
             ports:
             - containerPort: 8443
