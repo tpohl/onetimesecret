@@ -1,4 +1,4 @@
-FROM ruby:latest
+FROM ruby:2.6-buster
 
 # Dependencies
 RUN apt-get update \
